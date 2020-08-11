@@ -1,19 +1,21 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var twilio = require('twilio');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const twilio = require('twilio');
+
+require('dotenv').config();
 
 // Load configuration information from system environment variables.
-var TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID,
-    TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN,
-    TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER;
+const TWILIO_ACCOUNT_SID  = process.env.TWILIO_ACCOUNT_SID,
+      TWILIO_AUTH_TOKEN   = process.env.TWILIO_AUTH_TOKEN,
+      TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER;
 
 // Create an authenticated client to access the Twilio REST API
-var client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
