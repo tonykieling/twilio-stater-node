@@ -35,12 +35,15 @@ app.get('/', function(req, res, next) {
 // handle a POST request to send a text message. 
 // This is sent via ajax on our home page
 app.post('/message', function(req, res, next) {
+  console.log("inside /message");
+  console.log("req.body::::::::::", req.body);
   // Use the REST client to send a text message
   client.messages.create({
     to: req.body.to,
     from: TWILIO_PHONE_NUMBER,
-    body: 'Good luck on your Twilio quest!'
+    body: 'Good luck on your Twilio quest! TESTXXXXXX'
   }).then(function(message) {
+    console.log("message::", message);
     // When we get a response from Twilio, respond to the HTTP POST request
     res.send('Message is inbound!');
   });
@@ -49,6 +52,9 @@ app.post('/message', function(req, res, next) {
 // handle a POST request to make an outbound call.
 // This is sent via ajax on our home page
 app.post('/call', function(req, res, next) {
+  console.log("inside /call");
+  console.log("req.body::::::::::", req.body);
+
   // Use the REST client to send a text message
   client.calls.create({
     to: req.body.to,
@@ -62,6 +68,9 @@ app.post('/call', function(req, res, next) {
 
 // Create a TwiML document to provide instructions for an outbound call
 app.post('/hello', function(req, res, next) {
+  console.log("inside /hello");
+  console.log("req.body::::::::::", req.body);
+
   // Create a TwiML generator
   var twiml = new twilio.twiml.VoiceResponse();
   // var twiml = new twilio.TwimlResponse();
@@ -73,6 +82,19 @@ app.post('/hello', function(req, res, next) {
   // Return an XML response to this request
   res.set('Content-Type','text/xml');
   res.send(twiml.toString());
+});
+
+// doing test with a new endpoint
+// this method is gonna reply to a telephone for a message received
+app.post("/new", (req, res) => {  
+  console.log("===> inside /new");
+  console.log("req.body::::::::::", req.body);
+
+  const MessagingResponse = require("twilio").twiml.MessagingResponse;
+  const twiml = new MessagingResponse();
+  twiml.message(`'${req.body.Body}' to you too. :P`);
+  res.writeHead(200, {"Content-Type": "text/xml"});
+  res.end(twiml.toString());
 });
 
 // catch 404 and forward to error handler
